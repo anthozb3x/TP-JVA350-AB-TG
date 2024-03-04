@@ -149,6 +149,9 @@ public final class Entreprise {
      * Le TDD a permis de mieux comprendre le but de la fonction et de l'implémenter plus clairement
      */
     public static boolean estDansPlage(LocalDate d, LocalDate debut, LocalDate fin) {
+
+        //
+
         boolean isBetween = d.isAfter(debut) && d.isBefore(fin);
         return isBetween;
         //throw new RuntimeException("à implémenter en TDD !");

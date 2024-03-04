@@ -32,4 +32,28 @@ public class EntrepriseTest {
 
         Assertions.assertEquals(false, res, "La date indiquée n'est pas dans la plage selectionnée");
     }
+
+    @Test
+    public void testEstJourFerieTrue() {
+
+        // GIVEN
+        LocalDate jour = Localdate.of(now.getYear(), 1, 1);
+        // WHEN
+        boolean res = Entreprise.estJourFerie(jour);
+        // THEN
+
+        Assertions.assertEquals(true, res, "La date indiquée est un jour ferié");
+    }
+
+    @Test
+    public void testEstJourFerieFalse() {
+
+        // GIVEN
+        LocalDate jour = Localdate.of(now.getYear(), 1, 3);
+        // WHEN
+        boolean res = Entreprise.estJourFerie(jour);
+        // THEN
+
+        Assertions.assertEquals(false, res, "La date indiquée n'est pas un jour ferié");
+    }
 }
