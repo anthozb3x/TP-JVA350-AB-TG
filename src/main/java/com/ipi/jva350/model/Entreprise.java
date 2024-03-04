@@ -144,7 +144,9 @@ public final class Entreprise {
      * @param d correspond à la date à tester
      * @param debut date de début de la plage
      * @param fin date de fin de la plage
-     * @return
+     * @return Boolean
+     *
+     * Le TDD a permis de mieux comprendre le but de la fonction et de l'implémenter plus clairement
      */
     public static boolean estDansPlage(LocalDate d, LocalDate debut, LocalDate fin) {
         boolean isBetween = d.isAfter(debut) && d.isBefore(fin);
