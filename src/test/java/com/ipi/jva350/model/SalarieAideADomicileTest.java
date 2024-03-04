@@ -52,7 +52,8 @@ public class SalarieAideADomicileTest {
                 9, 1, 8);
         // When :
         boolean res = monSalarie.aLegalementDroitADesCongesPayes();
-        // Then :
+        // The
+        // n :
         Assertions.assertEquals(false, res, "avec 9 jours travaillés en N-1 (au plus), le résultat doit être faux");
     }
 
