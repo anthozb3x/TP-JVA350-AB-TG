@@ -150,7 +150,6 @@ public final class Entreprise {
      */
     public static boolean estDansPlage(LocalDate d, LocalDate debut, LocalDate fin) {
 
-        //
 
         boolean isBetween = d.isAfter(debut) && d.isBefore(fin);
         return isBetween;
