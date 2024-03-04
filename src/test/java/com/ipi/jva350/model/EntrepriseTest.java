@@ -1,12 +1,8 @@
 package com.ipi.jva350.model;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-
 import java.time.LocalDate;
-import com.ipi.jva350.model.Entreprise;
+
 
 public class EntrepriseTest {
     @Test
@@ -37,7 +33,7 @@ public class EntrepriseTest {
     public void testEstJourFerieTrue() {
 
         // GIVEN
-        LocalDate jour = Localdate.of(now.getYear(), 1, 1);
+        LocalDate jour = LocalDate.of(LocalDate.now().getYear(), 8,15);
         // WHEN
         boolean res = Entreprise.estJourFerie(jour);
         // THEN
@@ -49,7 +45,7 @@ public class EntrepriseTest {
     public void testEstJourFerieFalse() {
 
         // GIVEN
-        LocalDate jour = Localdate.of(now.getYear(), 1, 3);
+        LocalDate jour = LocalDate.of(LocalDate.now().getYear(), 1, 3);
         // WHEN
         boolean res = Entreprise.estJourFerie(jour);
         // THEN
