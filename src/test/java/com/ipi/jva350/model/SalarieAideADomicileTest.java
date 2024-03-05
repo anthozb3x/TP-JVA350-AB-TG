@@ -1,14 +1,18 @@
 package com.ipi.jva350.model;
 
+import com.ipi.jva350.repository.SalarieAideADomicileRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 
 public class SalarieAideADomicileTest {
+
 
     @Test
     public void testALegalementDroitADesCongesPayesDefaultValue() {
@@ -52,8 +56,7 @@ public class SalarieAideADomicileTest {
                 9, 1, 8);
         // When :
         boolean res = monSalarie.aLegalementDroitADesCongesPayes();
-        // The
-        // n :
+        // Then :
         Assertions.assertEquals(false, res, "avec 9 jours travaillés en N-1 (au plus), le résultat doit être faux");
     }
 
@@ -77,5 +80,7 @@ public class SalarieAideADomicileTest {
         // Then :
         Assertions.assertEquals(expectedNb, resNb.size());
     }
+
+
 
 }

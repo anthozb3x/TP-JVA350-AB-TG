@@ -69,7 +69,7 @@ public class SalarieAideADomicile {
      *     à l'intérieur d'une période de temps – dite de « référence » – allant du 1er juin de l'année N-1 au 31 mai de l'année N.
      * NB. on considère que la précédente ligne est correcte d'un point de vue des spécifications métier
      * bien que l'originale dans le lien dit "N+1" au lieu de "N-1"
-     * @return
+     * @returncalculeLimiteEntrepriseCongesPermis
      */
     public boolean aLegalementDroitADesCongesPayes() {
         return this.getJoursTravaillesAnneeNMoins1() >= 10;
