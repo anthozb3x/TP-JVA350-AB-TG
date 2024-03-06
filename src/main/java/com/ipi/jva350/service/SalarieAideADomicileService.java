@@ -6,6 +6,8 @@ import com.ipi.jva350.model.SalarieAideADomicile;
 import com.ipi.jva350.repository.SalarieAideADomicileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityExistsException;
 import java.math.BigDecimal;
@@ -16,6 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class SalarieAideADomicileService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SalarieAideADomicileService.class);
+
 
     @Autowired
     private SalarieAideADomicileRepository salarieAideADomicileRepository;
@@ -30,11 +35,14 @@ public class SalarieAideADomicileService {
      */
     public void creerSalarieAideADomicile(SalarieAideADomicile salarieAideADomicile)
             throws SalarieException, EntityExistsException {
+        LOGGER.debug("Tentative de création d'un salarié aide à domicile avec le nom {}", salarieAideADomicile.getNom());
         SalarieAideADomicile existant = salarieAideADomicileRepository.findByNom(salarieAideADomicile.getNom());
         if (existant != null) {
+            LOGGER.error("Un salarié existe déjà avec le nom {}", existant.getNom());
             throw new SalarieException("Un salarié existe déjà avec le nom " + existant.getNom());
         }
         if (salarieAideADomicile.getId() != null) {
+            LOGGER.error("L'id ne doit pas être fourni lors de la création d'un salarié");
             throw new SalarieException("L'id ne doit pas être fourni car il est généré");
         }
        salarieAideADomicileRepository.save(salarieAideADomicile);
@@ -62,6 +70,7 @@ public class SalarieAideADomicileService {
                                                       LocalDate moisDebutContrat,
                                                       LocalDate premierJourDeConge, LocalDate dernierJourDeConge) {
         // proportion selon l'avancement dans l'année, pondérée avec poids plus gros sur juillet et août (20 vs 8) :
+        LOGGER.debug("Calcul de la limite d'entreprise des congés permis pour {}", moisEnCours);
         double proportionPondereeDuConge = Math.max(Entreprise.proportionPondereeDuMois(premierJourDeConge),
                 Entreprise.proportionPondereeDuMois(dernierJourDeConge));
         double limiteConges = proportionPondereeDuConge * congesPayesAcquisAnneeNMoins1;
@@ -88,6 +97,7 @@ public class SalarieAideADomicileService {
         // arrondi pour éviter les miettes de calcul en Double :
         BigDecimal limiteCongesBd = new BigDecimal(Double.toString(limiteConges));
         limiteCongesBd = limiteCongesBd.setScale(3, RoundingMode.HALF_UP);
+        LOGGER.info("Limite d'entreprise des congés permis calculée");
         return Math.round(limiteCongesBd.doubleValue());
     }
 
@@ -104,6 +114,7 @@ public class SalarieAideADomicileService {
      */
     public void ajouteConge(SalarieAideADomicile salarieAideADomicile, LocalDate jourDebut, LocalDate jourFin)
             throws SalarieException {
+        LOGGER.debug("Ajout de congé pour le salarié {} du {} au {}", salarieAideADomicile.getNom(), jourDebut, jourFin);
         if (!salarieAideADomicile.aLegalementDroitADesCongesPayes()) {
             throw new SalarieException("N'a pas légalement droit à des congés payés !");
         }
@@ -149,7 +160,7 @@ public class SalarieAideADomicileService {
 
         salarieAideADomicile.getCongesPayesPris().addAll(joursDecomptes);
         salarieAideADomicile.setCongesPayesPrisAnneeNMoins1(nbCongesPayesPrisDecomptesAnneeN);
-
+        LOGGER.info("Congé ajouté pour le salarié {}", salarieAideADomicile.getNom());
         salarieAideADomicileRepository.save(salarieAideADomicile);
     }
 
@@ -165,6 +176,7 @@ public class SalarieAideADomicileService {
      */
     public void clotureMois(SalarieAideADomicile salarieAideADomicile, double joursTravailles) throws SalarieException {
         // incrémente les jours travaillés de l'année N du salarié de celles passées en paramètres
+        LOGGER.debug("Clôture du mois pour {}", salarieAideADomicile.getNom());
         salarieAideADomicile.setJoursTravaillesAnneeN(salarieAideADomicile.getJoursTravaillesAnneeN() + joursTravailles);
 
         salarieAideADomicile.setCongesPayesAcquisAnneeN(salarieAideADomicile.getCongesPayesAcquisAnneeN()
@@ -175,7 +187,7 @@ public class SalarieAideADomicileService {
         if (salarieAideADomicile.getMoisEnCours().getMonth().getValue() == 6) {
             clotureAnnee(salarieAideADomicile);
         }
-
+        LOGGER.info("Mois clôturé pour {}", salarieAideADomicile.getNom());
         salarieAideADomicileRepository.save(salarieAideADomicile);
     }
 
@@ -185,6 +197,7 @@ public class SalarieAideADomicileService {
      * @param salarieAideADomicile
      */
     void clotureAnnee(SalarieAideADomicile salarieAideADomicile) {
+        LOGGER.debug("Clôture de l'année pour {}", salarieAideADomicile.getNom());
         salarieAideADomicile.setJoursTravaillesAnneeNMoins1(salarieAideADomicile.getJoursTravaillesAnneeN());
         salarieAideADomicile.setCongesPayesAcquisAnneeNMoins1(salarieAideADomicile.getCongesPayesAcquisAnneeN());
         salarieAideADomicile.setCongesPayesPrisAnneeNMoins1(0);
@@ -198,6 +211,7 @@ public class SalarieAideADomicileService {
                 .collect(Collectors.toList())));
 
         salarieAideADomicileRepository.save(salarieAideADomicile);
+        LOGGER.info("Année clôturée pour {}", salarieAideADomicile.getNom());
     }
 
 }
