@@ -35,11 +35,11 @@ public class SalarieAideADomicileRepositoryTest {
     public void testPartCongesPrisTotauxAnneeNMoins1() {
 
         // WHEN
-        Double result = repository.partCongesPrisTotauxAnneeNMoins1();
+        Double resultat = repository.partCongesPrisTotauxAnneeNMoins1();
 
         // THEN
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(8.0, result, 0.01);
+        Assertions.assertNotNull(resultat);
+        Assertions.assertEquals(8.0, resultat, 0.01);
 
     }
 }

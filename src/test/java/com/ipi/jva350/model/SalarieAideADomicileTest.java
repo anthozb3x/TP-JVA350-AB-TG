@@ -19,21 +19,22 @@ public class SalarieAideADomicileTest {
         // Given :
         SalarieAideADomicile monSalarie = new SalarieAideADomicile();
         // When :
-        boolean res = monSalarie.aLegalementDroitADesCongesPayes();
+        boolean resultat = monSalarie.aLegalementDroitADesCongesPayes();
         // Then :
-        Assertions.assertEquals(false, res);
+        Assertions.assertEquals(false, resultat);
     }
 
     @Test
     public void testALegalementDroitADesCongesPayesNominal() {
         // Given :
-        SalarieAideADomicile monSalarie = new SalarieAideADomicile("Paul",
-                LocalDate.of(2023, 6, 28), LocalDate.now(), 20, 2.5,
+        SalarieAideADomicile salarie = new SalarieAideADomicile("Paul",
+                LocalDate.of(2023, 6, 28),
+                LocalDate.now(), 20, 2.5,
                 120, 15, 8);
         // When :
-        boolean res = monSalarie.aLegalementDroitADesCongesPayes();
+        boolean resultat = salarie.aLegalementDroitADesCongesPayes();
         // Then :
-        Assertions.assertEquals(true, res);
+        Assertions.assertEquals(true, resultat);
     }
 
     @Test
@@ -43,9 +44,9 @@ public class SalarieAideADomicileTest {
                 LocalDate.of(2023, 6, 28), LocalDate.now(), 20, 2.5,
                 10, 1, 8);
         // When :
-        boolean res = monSalarie.aLegalementDroitADesCongesPayes();
+        boolean resultat = monSalarie.aLegalementDroitADesCongesPayes();
         // Then :
-        Assertions.assertEquals(true, res, "avec 10 jours travaillés en N-1 (au moins), le résultat doit être vrai");
+        Assertions.assertEquals(true, resultat, "avec 10 jours travaillés en N-1 (au moins), le résultat doit être vrai");
     }
 
     @Test
@@ -55,9 +56,9 @@ public class SalarieAideADomicileTest {
                 LocalDate.of(2023, 6, 28), LocalDate.now(), 20, 2.5,
                 9, 1, 8);
         // When :
-        boolean res = monSalarie.aLegalementDroitADesCongesPayes();
+        boolean resultat = monSalarie.aLegalementDroitADesCongesPayes();
         // Then :
-        Assertions.assertEquals(false, res, "avec 9 jours travaillés en N-1 (au plus), le résultat doit être faux");
+        Assertions.assertEquals(false, resultat, "avec 9 jours travaillés en N-1 (au plus), le résultat doit être faux");
     }
 
     @ParameterizedTest
